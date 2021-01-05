@@ -1,0 +1,23 @@
+<div class="wrapper">
+  <div class="checkout container">
+    <div class="content">
+
+      <header>
+        <h1>Hi, <br>List of transactions</h1>
+      </header>
+
+      <section>
+        <ul>
+          <% @transactions.each do |transaction| %>
+            <li><%= link_to transaction.id, checkout_url(transaction.id) %></li>
+          <% end %>
+        </ul>
+
+        <%= link_to new_checkout_path, class: "button" do %>
+          <span>New transaction</span>
+        <% end %>
+      </section>
+
+    </div>
+  </div>
+</div>

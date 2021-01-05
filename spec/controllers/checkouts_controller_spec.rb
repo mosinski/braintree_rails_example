@@ -12,6 +12,24 @@ RSpec.describe CheckoutsController, type: :controller do
     expect(Braintree::Gateway).to receive(:new).and_return(@mock_gateway)
   end
 
+  describe "GET #index" do
+    it "returns http success" do
+      allow(@mock_gateway).to receive_message_chain("transaction.search") { [mock_transaction] }
+
+      get :index
+
+      expect(response).to have_http_status(:success)
+    end
+
+    it "displays transaction ids" do
+      allow(@mock_gateway).to receive_message_chain("transaction.search") { [mock_transaction] }
+
+      get :index
+
+      expect(response.body).to match /my_id/
+    end
+  end
+
   describe "GET #new" do
     it "returns http success" do
       get :new
@@ -89,7 +107,7 @@ RSpec.describe CheckoutsController, type: :controller do
       amount = "10.00"
       nonce = "fake-valid-nonce"
 
-      allow(@mock_gateway).to receive_message_chain("transaction.sale") { 
+      allow(@mock_gateway).to receive_message_chain("transaction.sale") {
         Braintree::SuccessfulResult.new(transaction: mock_transaction)
       }
 
@@ -103,7 +121,7 @@ RSpec.describe CheckoutsController, type: :controller do
         amount = "2000"
         nonce = "fake-valid-nonce"
 
-        allow(@mock_gateway).to receive_message_chain("transaction.sale") { 
+        allow(@mock_gateway).to receive_message_chain("transaction.sale") {
           processor_declined_result
         }
 
@@ -118,7 +136,7 @@ RSpec.describe CheckoutsController, type: :controller do
         amount = "not_a_valid_amount"
         nonce = "not_a_valid_nonce"
 
-        allow(@mock_gateway).to receive_message_chain("transaction.sale") { 
+        allow(@mock_gateway).to receive_message_chain("transaction.sale") {
           sale_error_result
         }
 
@@ -134,7 +152,7 @@ RSpec.describe CheckoutsController, type: :controller do
         amount = "not_a_valid_amount"
         nonce = "not_a_valid_nonce"
 
-        allow(@mock_gateway).to receive_message_chain("transaction.sale") { 
+        allow(@mock_gateway).to receive_message_chain("transaction.sale") {
           sale_error_result
         }
 

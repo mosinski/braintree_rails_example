@@ -45,7 +45,7 @@ GEM
     arel (9.0.0)
     binding_of_caller (0.8.0)
       debug_inspector (>= 0.0.1)
-    bootsnap (1.3.2)
+    bootsnap (1.4.6)
       msgpack (~> 1.0)
     braintree (2.102.0)
       builder (>= 2.0.0)
@@ -201,7 +201,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bootsnap (= 1.3.2)
+  bootsnap (= 1.4.6)
   braintree (~> 2.87)
   byebug
   coffee-rails (~> 4.2.2)
@@ -223,4 +223,4 @@ DEPENDENCIES
   web-console (~> 2.0)
 
 BUNDLED WITH
-   2.1.2
+   2.2.4

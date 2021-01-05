@@ -39,7 +39,14 @@
   braintree.dropin.create({
     authorization: client_token,
     container: '#bt-dropin',
+    vaultManager: true,
     paypal: {
+      flow: 'vault'
+    },
+    google_pay: {
+      flow: 'vault'
+    },
+    venmo: {
       flow: 'vault'
     }
   }, function (createErr, instance) {

@@ -5,6 +5,30 @@ RSpec.describe CheckoutsController, type: :controller do
   render_views
 
   let!(:random) { Random.new }
+  let(:gateway) {
+    Braintree::Gateway.new(
+      environment: ENV["BT_ENVIRONMENT"].to_sym,
+      merchant_id: ENV["BT_MERCHANT_ID"],
+      public_key: ENV["BT_PUBLIC_KEY"],
+      private_key: ENV["BT_PRIVATE_KEY"],
+    )
+  }
+
+  describe "GET #index" do
+    let!(:transaction) {
+      gateway.transaction.sale(
+        amount: "#{random.rand(100)}.#{random.rand(100)}",
+        payment_method_nonce: "fake-valid-nonce",
+      ).transaction
+    }
+
+    it "retrieves the Braintree transactions and displays ids" do
+      get :index
+
+      expect(response).to have_http_status(:success)
+      expect(response.body).to match Regexp.new(transaction.id)
+    end
+  end
 
   describe "GET #new" do
     it "retrieves the Braintree client token and adds it to the page" do
@@ -16,15 +40,6 @@ RSpec.describe CheckoutsController, type: :controller do
   end
 
   describe "GET #show" do
-    let(:gateway) {
-      Braintree::Gateway.new(
-        :environment =>  ENV["BT_ENVIRONMENT"].to_sym,
-        :merchant_id => ENV["BT_MERCHANT_ID"],
-        :public_key => ENV["BT_PUBLIC_KEY"],
-        :private_key => ENV["BT_PRIVATE_KEY"],
-      )
-    }
-
     it "retrieves the Braintree transaction and displays its attributes" do
       # Using a random amount to prevent duplicate checking errors
       amount = "#{random.rand(100)}.#{random.rand(100)}"

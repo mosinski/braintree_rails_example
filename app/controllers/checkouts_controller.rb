@@ -9,6 +9,10 @@ class CheckoutsController < ApplicationController
     Braintree::Transaction::Status::SubmittedForSettlement,
   ]
 
+  def index
+    @transactions = gateway.transaction.search
+  end
+
   def new
     @client_token = gateway.client_token.generate
   end
